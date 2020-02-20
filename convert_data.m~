@@ -41,19 +41,17 @@ function convert(source_root_dir, target_root_dir, mode, flag_resize, fine_heigh
 		fprintf('%d/%d: %s %s\n', i, N, imname, cname);
 	   
 		% generate cloth mask
-		im_c = imread([source_root_dir mode '/cloth/' cname]);
+		im_c = imread([source_root_dir '/' mode '/cloth/' cname]);
 		
 		% generate parsing result
-		im = imread([source_root_dir  mode '/image/' imname]);
+		im = imread([source_root_dir '/' mode 'cloth/' imname]);
 		h = size(im,1);
 		w = size(im,2);
-		s_name = strrep(imname,'.jpg','.png');
-        fprintf(s_name);
-		segment = importdata([source_root_dir mode '/image-parse/' s_name]);
+		s_name = strrep(imname,'.jpg','.mat');
+		segment = importdata([source_root_dir '/' 'segment/' s_name]);
 		segment = segment';
 	
 	    if h > w
-            fprintf(segment);
 	        segment = segment(:,1:int32(641.0*w/h));
 	    else
 	        segment = segment(1:int32(641.8*h/w),:);
@@ -102,7 +100,7 @@ function convert(source_root_dir, target_root_dir, mode, flag_resize, fine_heigh
 		% save parsing result
 	    segment = uint8(segment);
 	    pname = strrep(imname, '.jpg', '.png');
-	    imwrite(segment,cmap,[target_root_dir '/' mode '/image/' pname]);
+	    imwrite(segment,cmap,[target_root_dir '/' mode '/image-parse/' pname]);
 	    
 	    % save the pose info
 	    key_name = strrep(imname, '.jpg', '_keypoints.json');
